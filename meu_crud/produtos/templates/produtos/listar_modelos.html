@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Modelos</title>
+</head>
+<body>
+    
+    <h1>Modelos de Notebooks</h1>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% else %}
+        <ul>
+            {% for modelo in modelos %}
+                <li>
+                    <strong>{{ modelo.name }}</strong><br>
+                    <img src="{{ modelo.thumbnail }}" alt="{{ modelo.name }}" width="150"><br>
+                    <a href="{{ modelo.official_link }}" target="_blank">Link Oficial</a><br>
+                    <small>Lançado em: {{ modelo.launch_date|default:"Data desconhecida" }}</small>
+                    <a href="{% url 'produtos:preencher_form' %}?model_id={{ modelo.id }}">Selecionar</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

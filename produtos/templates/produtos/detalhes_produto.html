@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos - Aluguel de Notebooks</title>
+</head>
+<body>
+    <h1>{{ produto.nome }}</h1>
+    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+    <p><strong>Preço:</strong> R${{ produto.preco }}</p>
+    <p><strong>Estoque:</strong> {{ produto.estoque }}</p>
+    <p>{{ produto.descricao }}</p>
+    <a href="{% url 'alugar' %}">Alugar</a>
+</body>
+    

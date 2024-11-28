@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos os Aluguéis</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            background-color: #2a9d8f;
+            width: 100%;
+            color: #fff;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .main-container {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #2a9d8f;
+            color: #fff;
+        }
+
+        td {
+            background-color: #fff;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f2f2f2;
+        }
+
+        .btn-delete {
+            color: #fff;
+            padding: 6px 12px;
+            background-color: #e76f51;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            background-color: #d85a39;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #2a9d8f;
+            font-size: 1.1rem;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .back-link:hover {
+            color: #1b7a64;
+        }
+
+        .no-results {
+            font-size: 1.2rem;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Todos os Aluguéis</h1>
+    </header>
+
+    <div class="main-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Usuário</th>
+                    <th>Notebook</th>
+                    <th>Meses</th>
+                    <th>Data do Aluguel</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for aluguel in alugueis %}
+                <tr>
+                    <td>{{ aluguel.id }}</td>
+                    <td>{{ aluguel.usuario.username }}</td>
+                    <td>{{ aluguel.notebook.nome }}</td>
+                    <td>{{ aluguel.meses }}</td>
+                    <td>{{ aluguel.data_aluguel|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        <form method="POST" action="{% url 'produtos:deletar_aluguel' aluguel.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-delete" onclick="return confirm('Deseja realmente excluir este aluguel?');">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="no-results">Nenhum aluguel encontrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{% url 'listar_produtos' %}" class="back-link">Voltar</a>
+    </div>
+</body>
+</html>

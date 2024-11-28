@@ -1,0 +1,29 @@
+<!-- produtos/templates/produtos/adicionar.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Produto</title>
+</head>
+<body>
+    <h1>Adicionar Novo Produto</h1>
+    <a href="{% url 'produtos:listar_modelos' %}">Listar Modelos</a>
+    <form method="get" action="{% url 'produtos:listar_modelos' %}">
+        <label for="search">Pesquisar modelo:</label>
+        <input type="text" id="search" name="model_name" placeholder="Digite o nome do modelo">
+        <button type="submit">Buscar</button>
+    </form>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}{% if form.imagem.value %}
+        <div>
+            <label>Imagem atual:</label>
+            <a href="{{ form.imagem.value }}" target="_blank">{{ form.imagem.value }}</a>
+        </div>
+        {% endif %}
+        <button type="submit">Adicionar Produto</button>
+    </form>
+    <a href="{% url 'produtos:listar_produtos' %}">Voltar à lista de produtos</a>
+</body>
+</html>

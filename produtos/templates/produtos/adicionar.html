@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Produto</title>
+    <style>
+        /* Estilo geral da página */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #2a9d8f;
+            text-align: center;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .campo {
+            margin-bottom: 15px;
+        }
+
+        .campo label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .campo input,
+        .campo textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Arial', sans-serif;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .campo input:focus,
+        .campo textarea:focus {
+            border-color: #2a9d8f;
+            outline: none;
+            box-shadow: 0 0 8px rgba(42, 157, 143, 0.3);
+        }
+
+        .campo textarea {
+            resize: vertical;
+            overflow-x: hidden;
+        }
+
+        button {
+            background-color: #2a9d8f;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #219a7e;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            text-decoration: none;
+            color: #2a9d8f;
+        }
+
+        a:hover {
+            color: #1f7866;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-container label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .search-container input {
+            padding: 12px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Arial', sans-serif;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .search-container input:focus {
+            border-color: #2a9d8f;
+            outline: none;
+            box-shadow: 0 0 8px rgba(42, 157, 143, 0.3);
+        }
+
+        .search-container button {
+            background-color: #2a9d8f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-container button:hover {
+            background-color: #219a7e;
+        }
+
+        .voltar-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #2a9d8f;
+        }
+
+        .voltar-link:hover {
+            color: #1f7866;
+        }
+
+        /* Estilo para o botão "Listar Modelos" */
+        form .listar-modelos-btn {
+            background-color: transparent !important; /* Remove o fundo */
+            color: #2a9d8f !important; /* Cor do texto */
+            border: 2px solid #2a9d8f !important; /* Borda verde */
+            padding: 10px 20px; /* Padding ajustado */
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            margin-top: 15px;
+            transition: border-color 0.3s ease, background-color 0.3s ease; /* Suavização */
+        }
+
+        form .listar-modelos-btn:hover {
+            background-color: #2a9d8f !important; /* Cor de fundo verde ao passar o mouse */
+            color: white !important; /* Cor do texto em branco */
+        }
+    </style>
+</head>
+<body>
+    <h1>Adicionar Produto</h1>
+
+    <div class="search-container">
+        <form method="get" action="{% url 'produtos:listar_modelos' %}">
+            <label for="search">Pesquisar modelo:</label>
+            <input type="text" id="search" name="model_name" placeholder="Digite o nome do modelo">
+            <button type="submit">Buscar</button>
+        </form>
+
+        <form method="get" action="{% url 'produtos:listar_modelos' %}">
+            <button type="submit" class="listar-modelos-btn">Lista de Modelos</button>
+        </form>
+    </div>
+
+    <div class="form-container">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="campo">
+                <label for="id_nome">Nome do Produto</label>
+                {{ form.nome }}
+            </div>
+
+            <div class="campo">
+                <label for="id_descricao">Descrição</label>
+                {{ form.descricao }}
+            </div>
+
+            <div class="campo">
+                <label for="id_preco">Preço</label>
+                {{ form.preco }}
+            </div>
+
+            <div class="campo">
+                <label for="id_estoque">Estoque</label>
+                {{ form.estoque }}
+            </div>
+
+            <div class="campo">
+                <label for="id_imagem">Imagem</label>
+                {{ form.imagem }}
+            </div>
+
+            <button type="submit">Adicionar Produto</button>
+
+            <a class="voltar-link" href="{% url 'produtos:listar_produtos' %}">Voltar à lista de produtos</a>
+        </form>
+    </div>
+</body>
+</html>

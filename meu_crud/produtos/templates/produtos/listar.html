@@ -1,0 +1,47 @@
+<!-- produtos/templates/produtos/listar.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos - Aluguel de Notebooks</title>
+</head>
+<body>
+    <h1>Lista de Produtos</h1>
+    
+    {% if user.is_authenticated %}
+        <p>Bem-vindo, {{ user.username }}!</p>
+        
+        {% if user.is_superuser %}
+            <a href="/admin/">Ir para a área de administração</a>
+        {% endif %}
+        
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <p>Bem-vindo, visitante! Faça o login para adicionar ou editar produtos.</p>
+    {% endif %}
+    
+    {% if user.is_authenticated and user.is_superuser %}
+        <a href="{% url 'produtos:adicionar_produto' %}">Adicionar Novo Produto</a>
+    {% endif %}
+    
+    <ul>
+        {% for produto in produtos %}
+            <li>
+                {{ produto.nome }} - R$ {{ produto.preco }}
+                
+                {% if produto.imagem %}
+                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" width="100">
+                {% else %}
+                    <p>Sem imagem disponível</p>
+                {% endif %}
+                    <a href="{% url 'produtos:detalhes_produto' produto.id %}">Visualizar</a>
+                {% if user.is_authenticated and user.is_superuser %}
+                    <a href="{% url 'produtos:editar_produto' produto.id %}">Editar</a> |
+                    <a href="{% url 'produtos:remover_produto' produto.id %}" onclick="return confirm('Você tem certeza que deseja remover este produto?')">Remover</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!-- produtos/templates/produtos/listar.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nitro Wing</title>
+    <style>
+        /* Estilo geral */
+        .body-container {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .title {
+            font-size: 2rem;
+            color: #2a9d8f;
+            margin: 20px 0 10px;
+        }
+
+        .welcome-message {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            background-color: #2a9d8f;
+            padding: 10px 15px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .navbar a, .navbar button {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1rem;
+            padding: 8px 12px;
+            border-radius: 5px;
+            background-color: #2a9d8f;
+            border: none;
+            cursor: pointer;
+        }
+
+        .navbar a:hover, .navbar button:hover {
+            background-color: #21867a;
+        }
+
+        .products-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .product-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .product-price {
+            font-size: 1rem;
+            color: #2a9d8f;
+            margin: 10px 0;
+        }
+
+        .product-links {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .product-links a {
+            text-decoration: none;
+            color: #fff;
+            background-color: #2a9d8f;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .product-links a:hover {
+            background-color: #21867a;
+        }
+
+        .no-image {
+            font-size: 0.9rem;
+            color: #999;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body class="body-container">
+    <h1 class="title">Nitro Wing</h1>
+
+    {% if user.is_authenticated %}
+        <p class="welcome-message">Bem-vindo, {{ user.username }}!</p>
+        <nav class="navbar">
+            <a href="{% url 'produtos:listar_alugueis' %}">Meus Aluguéis</a>
+            {% if user.is_superuser %}
+                <a href="{% url 'produtos:adicionar_produto' %}">Adicionar Produto</a>
+                <a href="{% url 'produtos:adm_alugueis' %}">Administrar Aluguéis</a>
+                <a href="/admin/">Área de Administração</a>
+            {% endif %}
+            <form action="{% url 'logout' %}" method="POST" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit">Sair</button>
+            </form>
+        </nav>
+    {% else %}
+        <p class="welcome-message">Sua maior rede de aluguel para Notebooks!</p>        
+        <nav class="navbar">
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'cadastro' %}">Cadastrar-se</a>
+        </nav>
+    {% endif %}
+
+    <ul class="products-list">
+        {% for produto in produtos %}
+            <li class="product-item">
+                {% if produto.imagem %}
+                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+                {% else %}
+                    <p class="no-image">Sem imagem disponível</p>
+                {% endif %}
+                <p class="product-name">{{ produto.nome }}</p>
+                <p class="product-price">R$ {{ produto.preco }}</p>
+                <div class="product-links">
+                    <a href="{% url 'produtos:alugar_produto' produto.id %}">Alugar</a>
+                    {% if user.is_authenticated and user.is_superuser %}
+                        <a href="{% url 'produtos:editar_produto' produto.id %}">Editar</a>
+                        <a href="{% url 'produtos:remover_produto' produto.id %}" onclick="return confirm('Você tem certeza que deseja remover este produto?')">Remover</a>
+                    {% endif %}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

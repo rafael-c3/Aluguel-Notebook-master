@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Aluguéis</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            background-color: #2a9d8f;
+            width: 100%;
+            color: #fff;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .welcome-message {
+            margin-top: 10px;
+            font-size: 1.2rem;
+        }
+
+        .main-container {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Exibe 4 registros por linha */
+            gap: 20px; /* Espaço entre os registros */
+        }
+
+        li {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        li strong {
+            color: #2a9d8f;
+        }
+
+        .btn-back {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: transparent;
+            color: #2a9d8f;
+            border: 2px solid #2a9d8f;
+            border-radius: 5px;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-back:hover {
+            background-color: #2a9d8f;
+            color: #fff;
+        }
+
+        /* Centraliza o botão Voltar */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn-back {
+            align-self: center; /* Centraliza o botão */
+        }
+
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            ul {
+                grid-template-columns: repeat(3, 1fr); /* 3 registros por linha em telas médias */
+            }
+        }
+
+        @media (max-width: 768px) {
+            ul {
+                grid-template-columns: repeat(2, 1fr); /* 2 registros por linha em telas pequenas */
+            }
+        }
+
+        @media (max-width: 480px) {
+            ul {
+                grid-template-columns: 1fr; /* 1 registro por linha em telas muito pequenas */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Meus Aluguéis</h1>
+        {% if user.is_authenticated %}
+        <div class="welcome-message">Bem-vindo, {{ user.username }}!</div>
+        {% endif %}
+    </header>
+
+    <main class="main-container">
+        <ul>
+            {% for aluguel in alugueis %}
+                <li>
+                    <strong>Notebook:</strong> {{ aluguel.notebook.nome }}<br>
+                    <strong>Meses:</strong> {{ aluguel.meses }}<br> 
+                    <strong>Data do aluguel:</strong> {{ aluguel.data_aluguel|date:"d/m/Y - H:i" }}<br>
+                </li>
+            {% empty %}
+                <p>Você ainda não realizou nenhum aluguel.</p>
+            {% endfor %}
+        </ul>
+
+        <a href="{% url 'listar_produtos' %}" class="btn-back">Voltar</a>
+    </main>
+</body>
+</html>
